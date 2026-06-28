@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}Documentation — PhishGuard{% endblock %}
+
+{% block content %}
+
+<section class="page-hero">
+  <div class="container">
+    <span class="badge">Technical Reference</span>
+    <h1>Project Documentation</h1>
+    <p>Technical reference for evaluators, viva preparation, and project review.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container doc-layout">
+
+    <aside class="doc-sidebar card">
+      <h3>Contents</h3>
+      <a href="#overview">1. Overview</a>
+      <a href="#architecture">2. Architecture</a>
+      <a href="#modules">3. Modules</a>
+      <a href="#workflow">4. Workflow</a>
+      <a href="#security">5. Security &amp; Ethics</a>
+      <a href="#run">6. How to Run</a>
+      <a href="#files">7. Submission Files</a>
+    </aside>
+
+    <div class="doc-content">
+
+      <article id="overview" class="card doc-block">
+        <h2>1. Overview</h2>
+        <p>
+          PhishGuard is a phishing simulation platform for cybersecurity awareness training,
+          built as part of the <strong>IBM SkillBuild Internship</strong> programme.
+          It uses Python Flask for the web server, <code>smtplib</code> for email delivery,
+          and SQLite for engagement metrics.
+        </p>
+        <p>
+          <strong>Tech Stack:</strong>
+          Python 3 &nbsp;·&nbsp; Flask &nbsp;·&nbsp; SQLite &nbsp;·&nbsp;
+          smtplib &nbsp;·&nbsp; Jinja2 &nbsp;·&nbsp; HTML / CSS
+        </p>
+        <p>
+          <strong>Key Constraint:</strong> Passwords entered on the fake login page
+          are <em>never stored</em> — the field is read once and immediately discarded.
+        </p>
+      </article>
+
+      <article id="architecture" class="card doc-block">
+        <h2>2. System Architecture</h2>
+        <pre class="code-block">send_campaign.py  →  SMTP email with /t/&lt;token&gt; link
+                         │
+                         ▼
+                    app.py  (Flask)
+                         │
+    ┌────────────────────┼────────────────────┐
+    ▼                    ▼                    ▼
+track_click()     landing_page()      microlearning()
+                         │
+                 submit_credentials()
+              (password discarded immediately)
+                         ▼
+              SQLite  metrics.db  →  admin_dashboard()</pre>
+      </article>
+
+      <article id="modules" class="card doc-block">
+        <h2>3. Modules</h2>
+        <table>
+          <thead>
+            <tr><th>File</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>app.py</code></td><td>Flask routes, click tracking, admin dashboard</td></tr>
+            <tr><td><code>send_campaign.py</code></td><td>SMTP phishing email sender with dry-run support</td></tr>
+            <tr><td><code>database.py</code></td><td>SQLite metrics layer — campaigns, recipients, events</td></tr>
+            <tr><td><code>config.py</code></td><td>Environment configuration via <code>.env</code></td></tr>
+            <tr><td><code>project_info.py</code></td><td>Student and college metadata for submission</td></tr>
+          </tbody>
+        </table>
+      </article>
+
+      <article id="workflow" class="card doc-block">
+        <h2>4. User Workflow</h2>
+        <ol style="padding-left:20px;line-height:2;">
+          <li>Admin runs <code>send_campaign.py</code> or user clicks <strong>Try Demo</strong></li>
+          <li>Recipient receives email or opens demo tracking link</li>
+          <li>Click logged → fake Microsoft login page shown</li>
+          <li>User submits form → password discarded, event logged</li>
+          <li>Micro-learning page explains all missed phishing indicators</li>
+          <li>Admin views metrics at <code>/admin</code></li>
+        </ol>
+      </article>
+
+      <article id="security" class="card doc-block">
+        <h2>5. Security &amp; Ethics</h2>
+        <ul class="check-list">
+          <li>Passwords are read and immediately discarded — never logged or persisted</li>
+          <li>Recipient emails stored as SHA-256 hash prefix — not plaintext</li>
+          <li>Unique cryptographic token (<code>secrets.token_urlsafe</code>) per recipient</li>
+          <li>Training disclaimers visible on all simulation pages</li>
+          <li>Authorized lab use only — not for real unauthorized phishing attacks</li>
+        </ul>
+      </article>
+
+      <article id="run" class="card doc-block">
+        <h2>6. How to Run</h2>
+        <pre class="code-block">cd PhishingSimulationPlatform
+py -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+python app.py</pre>
+        <p style="margin-top:16px;">
+          Open <a href="http://127.0.0.1:5000">http://127.0.0.1:5000</a>
+          or double-click <code>run.bat</code>.
+        </p>
+        <p><strong>Admin login:</strong> username <code>admin</code> &nbsp;/&nbsp; password set in <code>.env</code></p>
+      </article>
+
+      <article id="files" class="card doc-block">
+        <h2>7. Submission Files</h2>
+        <table>
+          <thead>
+            <tr><th>File</th><th>Purpose</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>PROJECT_REPORT.md</code></td><td>Full academic project report (convert to PDF)</td></tr>
+            <tr><td><code>SUBMISSION_GUIDE.md</code></td><td>Submission checklist for college</td></tr>
+            <tr><td><code>README.md</code></td><td>Setup and usage instructions</td></tr>
+            <tr><td><code>project_info.py</code></td><td>Your name, roll number, college details</td></tr>
+          </tbody>
+        </table>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}

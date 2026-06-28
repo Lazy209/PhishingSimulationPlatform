@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}PhishGuard — Security Awareness Platform{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="site-body">
+
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a class="nav-brand" href="{{ url_for('index') }}">
+        <!-- IBM-style bar logo -->
+        <div class="ibm-logo-bars">
+          <span></span><span></span><span></span>
+        </div>
+        <span class="nav-brand-text">
+          IBM SkillBuild
+          <span class="nav-brand-sub">PhishGuard · Security Awareness</span>
+        </span>
+      </a>
+
+      <div class="nav-links">
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('about') }}">About</a>
+        <a href="{{ url_for('documentation') }}">Docs</a>
+        <a href="{{ url_for('demo') }}" class="nav-demo">&#9654; Try Demo</a>
+        <a href="{{ url_for('admin_login') }}" class="btn btn-sm">Admin</a>
+      </div>
+    </div>
+  </nav>
+
+  {% block content %}{% endblock %}
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-ibm">
+        <div class="ibm-logo-bars" style="scale:0.85;">
+          <span></span><span></span><span></span>
+        </div>
+        IBM SkillBuild Internship Project
+      </div>
+      <p><strong>{{ project.project_title }}</strong></p>
+      <p>{{ project.student_name }} &nbsp;·&nbsp; {{ project.roll_number }} &nbsp;·&nbsp; {{ project.college_name }}</p>
+      <p>{{ project.department }} &nbsp;·&nbsp; {{ project.academic_year }}</p>
+      <p class="footer-note">Authorized security awareness training only &nbsp;·&nbsp; Passwords are never stored</p>
+    </div>
+  </footer>
+
+</body>
+</html>
